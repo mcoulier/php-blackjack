@@ -9,6 +9,7 @@ class Player
     public function __construct($deck)
     {
         $deck->drawCard();
+        $deck->drawCard();
     }
 
     public function hit()
