@@ -4,16 +4,17 @@ declare(strict_types=1);
 class Player
 {
     private array $cards = [];
-    private string $lost;
+    private bool $lost;
 
-    public function __construct($deck)
+    public function __construct(Deck $deck)
     {
+        $this->cards= [];
         array_push($this->cards, $deck->drawCard(), $deck->drawCard());
     }
 
-    public function hit()
+    public function hit(Deck $deck)
     {
-
+        array($this->cards, $deck->drawcard());
     }
     public function surrender()
     {
@@ -25,6 +26,7 @@ class Player
     }
     public function hasLost()
     {
-
+        $this->lost = true;
+        echo "You lost!";
     }
 }
