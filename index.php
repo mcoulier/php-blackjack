@@ -16,8 +16,8 @@ function whatIsHappening()
 {
 /*    echo '<h2>$_GET</h2>';
     var_dump($_GET);*/
-    echo '<h2>$_POST</h2>';
-    var_dump($_POST);
+/*    echo '<h2>$_POST</h2>';
+    var_dump($_POST);*/
 /*    echo '<h2>$_COOKIE</h2>';
     var_dump($_COOKIE);*/
     echo '<h2>$_SESSION</h2>';
@@ -27,20 +27,36 @@ function whatIsHappening()
 whatIsHappening();
 
 //Saving new blackjack game in session if it doesn't exist
-if (!isset($_SESSION['blackjack'])) {
+
+if (!isset($_SESSION['blackjack']))
+{
     $_SESSION['blackjack'] = new Blackjack();
+
 }
 
-$player = $_SESSION['blackjack']->getPlayer();
-$dealer = $_SESSION['blackjack']->getDealer();
-$deck = $_SESSION['blackjack']->getDeck();
+$game = $_SESSION['blackjack'];
 
+if (!isset($_SESSION['score']))
+{
+    $_SESSION['score'] = 0;
+}
+
+$player = $game->getPlayer();
+$dealer = $game->getDealer();
+$deck = $game->getDeck();
 
 if(!isset($_POST['action'])){
+
     echo "Game hasn't started";
 
 } elseif ($_POST['action'] === "hit"){
     $player->hit($deck);
+    var_dump($player->getCards());
+   /*foreach($deck->getCards() AS $card) {
+    echo $card->getUnicodeCharacter(true);
+    echo '<br>';
+    }*/
+
     echo "Player hit";
 
 } elseif ($_POST['action'] === "stand"){
@@ -48,7 +64,11 @@ if(!isset($_POST['action'])){
 
 } elseif ($_POST['action'] === "surrender"){
     $player->hasLost();
+
+} elseif ($_POST['action'] === "reset"){
+    session_unset();
 }
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -65,6 +85,8 @@ if(!isset($_POST['action'])){
     <input type="submit" name="action" value="hit">
     <input type="submit" name="action" value="stand">
     <input type="submit" name="action" value="surrender">
+    <input type="submit" name="action" value="reset">
+
 
 </body>
 </html>
