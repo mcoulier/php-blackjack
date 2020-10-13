@@ -5,23 +5,30 @@ class Player
 {
     private array $cards = [];
     private bool $lost;
+    private int $score;
 
+    //Push 2 cards in empty array
     public function __construct(Deck $deck)
     {
-        $this->cards= [];
         array_push($this->cards, $deck->drawCard(), $deck->drawCard());
     }
 
     public function hit(Deck $deck)
     {
-        array($this->cards, $deck->drawcard());
+        array_push($this->cards, $deck->drawcard());
     }
+
     public function surrender()
     {
 
     }
+
     public function getScore()
     {
+        $score=0;
+        foreach ($this->cards as $card){
+            $score += $card->getScore();
+        }
 
     }
     public function hasLost()
@@ -29,4 +36,9 @@ class Player
         $this->lost = true;
         echo "You lost!";
     }
+
+    public function getCards(){
+        return $this->cards;
+    }
 }
+//dealer extends player hit with parent:: if do while
