@@ -1,14 +1,17 @@
 <?php
 declare(strict_types=1);
 
-session_start();
-
+//Require files to use their variables
 require('Card.php');
 require('Player.php');
 require('Blackjack.php');
 require('Deck.php');
 require('Suit.php');
 
+//Starting a session to save in sessions
+session_start();
+
+//Var dump function to get info
 function whatIsHappening()
 {
 /*    echo '<h2>$_GET</h2>';
@@ -20,25 +23,31 @@ function whatIsHappening()
     echo '<h2>$_SESSION</h2>';
     var_dump($_SESSION);
 }
+
 whatIsHappening();
 
-$blackjack = new Blackjack();
-$player = $blackjack->getPlayer();
-$dealer = $blackjack->getDealer();
-
+//Saving new blackjack game in session if it doesn't exist
 if (!isset($_SESSION['blackjack'])) {
     $_SESSION['blackjack'] = new Blackjack();
 }
 
+$player = $_SESSION['blackjack']->getPlayer();
+$dealer = $_SESSION['blackjack']->getDealer();
+$deck = $_SESSION['blackjack']->getDeck();
+
+
 if(!isset($_POST['action'])){
-    echo "game hasn't started";
+    echo "Game hasn't started";
 
 } elseif ($_POST['action'] === "hit"){
-    $player->hit();
+    $player->hit($deck);
+    echo "Player hit";
+
+} elseif ($_POST['action'] === "stand"){
+    echo "Player stands";
 
 } elseif ($_POST['action'] === "surrender"){
     $player->hasLost();
-
 }
 ?>
 <!doctype html>
