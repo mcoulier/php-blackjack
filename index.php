@@ -47,6 +47,7 @@ if(!isset($_POST['action'])){
     echo "Game hasn't started";
 
 } elseif ($_POST['action'] === "hit"){
+
     $player->hit($deck);
     $player->getScore();
 
@@ -54,20 +55,23 @@ if(!isset($_POST['action'])){
         echo "Player bust";
     }
 
-    echo "Player hit";
-
 } elseif ($_POST['action'] === "stand"){
+
     $dealer->hit($deck);
 
-    if ($dealer->loser() == true){
-        echo "Dealer bust";
-    } elseif ($player->getScore() == $dealer->getScore()){
-        echo "Draw, dealer wins";
-    } else {
-        echo "Player won";
-    }
+    if ($dealer->getScore() > 21){
+        $dealer->hasLost();
+        echo "Dealer went bust, you won!";
 
-    echo "Player stands";
+    } elseif ($dealer->getScore() == 21){
+        echo "Dealer has 21, you lose.";
+
+    } elseif ($player->getScore() == $dealer->getScore()){
+        echo "Draw, dealer wins.";
+
+    } else {
+        echo "Player won!";
+    }
 
 } elseif ($_POST['action'] === "surrender"){
     $player->hasLost();
