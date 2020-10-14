@@ -7,13 +7,13 @@ class Blackjack
     private $dealer;
     private $deck;
 
-//Create deck, shuffle deck, distribute deck
+//Create deck, shuffle deck, distribute deck (important: first create deck, then instantiate players)
     public function __construct()
     {
         $this->deck = new Deck;
         $this->deck->shuffle();
         $this->player = new Player($this->deck);
-        $this->dealer = new Player($this->deck);
+        $this->dealer = new Dealer($this->deck);
     }
 
     public function getPlayer(): Player
@@ -30,4 +30,5 @@ class Blackjack
     {
         return $this->deck;
     }
+
 }
