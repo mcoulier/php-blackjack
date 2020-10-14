@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 class Player
 {
+
+    //Set lost value to false, no value gives error
     private array $cards = [];
-    private bool $lost;
-    private int $score;
+    private bool $lost = false;
 
     //Push 2 cards in empty array
     public function __construct(Deck $deck)
@@ -16,30 +17,37 @@ class Player
     public function hit(Deck $deck)
     {
         array_push($this->cards, $deck->drawcard());
+
+        if ($this->getScore() > 21){
+            $this->hasLost();
+        }
     }
 
     public function surrender()
     {
 
     }
-//Don't forget to return score in this function
+//Don't forget to set & return score in this function
     public function getScore()
     {
-        $score=0;
+        $score = 0;
         foreach ($this->cards as $card){
             $score += $card->getValue();
         }
         return $score;
 
     }
+
     public function hasLost()
     {
         $this->lost = true;
-        echo "You lost!";
+    }
+
+    public function loser(){
+        return $this->lost;
     }
 
     public function getCards(){
         return $this->cards;
     }
 }
-//dealer extends player hit with parent:: if do while
