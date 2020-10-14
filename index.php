@@ -20,20 +20,19 @@ function whatIsHappening()
     var_dump($_POST);*/
 /*    echo '<h2>$_COOKIE</h2>';
     var_dump($_COOKIE);*/
-    echo '<h2>$_SESSION</h2>';
-    var_dump($_SESSION);
+/*    echo '<h2>$_SESSION</h2>';
+    var_dump($_SESSION);*/
 }
 
 whatIsHappening();
 
 //Saving new blackjack game in session if it doesn't exist
-
 if (!isset($_SESSION['blackjack']))
 {
     $_SESSION['blackjack'] = new Blackjack();
 
 }
-
+//If session does exist, call it var game
 $game = $_SESSION['blackjack'];
 
 if (!isset($_SESSION['score']))
@@ -41,9 +40,11 @@ if (!isset($_SESSION['score']))
     $_SESSION['score'] = 0;
 }
 
+//Setting variables from
 $player = $game->getPlayer();
 $dealer = $game->getDealer();
 $deck = $game->getDeck();
+$_SESSION['score'] = $player->getScore();
 
 if(!isset($_POST['action'])){
 
@@ -51,11 +52,8 @@ if(!isset($_POST['action'])){
 
 } elseif ($_POST['action'] === "hit"){
     $player->hit($deck);
-    var_dump($player->getCards());
-   /*foreach($deck->getCards() AS $card) {
-    echo $card->getUnicodeCharacter(true);
-    echo '<br>';
-    }*/
+    $player->getScore();
+
 
     echo "Player hit";
 
@@ -80,6 +78,17 @@ if(!isset($_POST['action'])){
     <title>OOP PHP Blackjack</title>
 </head>
 <body>
+<H3>Player:</H3>
+<div>
+    <?php
+    foreach($player->getCards() AS $card) {
+        echo $card->getUnicodeCharacter(true);
+    }
+    echo $player->getScore();
+
+    ?>
+</div>
+
 
 <form action="index.php" method="post">
     <input type="submit" name="action" value="hit">
