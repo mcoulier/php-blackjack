@@ -4,6 +4,7 @@ declare(strict_types=1);
 //Require files to use their variables
 require('Card.php');
 require('Player.php');
+require('Dealer.php');
 require('Blackjack.php');
 require('Deck.php');
 require('Suit.php');
@@ -44,7 +45,7 @@ if (!isset($_SESSION['score']))
 $player = $game->getPlayer();
 $dealer = $game->getDealer();
 $deck = $game->getDeck();
-$_SESSION['score'] = $player->getScore();
+$score = $player->getScore();
 
 if(!isset($_POST['action'])){
 
@@ -54,17 +55,27 @@ if(!isset($_POST['action'])){
     $player->hit($deck);
     $player->getScore();
 
+    if($player->loser() == true){
+        echo "Player lost.";
+    }
 
     echo "Player hit";
 
 } elseif ($_POST['action'] === "stand"){
+    $dealer->hit($deck);
     echo "Player stands";
 
 } elseif ($_POST['action'] === "surrender"){
     $player->hasLost();
 
-} elseif ($_POST['action'] === "reset"){
+} if ($_POST['action'] === "reset"){
     session_unset();
+    $game = new Blackjack();
+    $_SESSION['blackjack'] = $game;
+    $player = $game->getPlayer();
+    $dealer = $game->getDealer();
+    $deck = $game->getDeck();
+    $score = $player->getScore();
 }
 
 ?>
@@ -76,10 +87,25 @@ if(!isset($_POST['action'])){
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>OOP PHP Blackjack</title>
+    <style>
+        #cards {
+            font-size: 80px;
+        }
+
+    </style>
 </head>
 <body>
+
+<form action="index.php" method="post">
+    <input type="submit" name="action" value="hit">
+    <input type="submit" name="action" value="stand">
+    <input type="submit" name="action" value="surrender">
+    <input type="submit" name="action" value="reset">
+
 <H3>Player:</H3>
 <div>
+
+    <p id="cards">
     <?php
     foreach($player->getCards() AS $card) {
         echo $card->getUnicodeCharacter(true);
@@ -87,14 +113,24 @@ if(!isset($_POST['action'])){
     echo $player->getScore();
 
     ?>
+    </p>
+</div>
+
+<H3>Dealer:</H3>
+<div>
+
+    <p id="cards">
+        <?php
+        foreach($dealer->getCards() AS $card) {
+            echo $card->getUnicodeCharacter(true);
+        }
+        echo $dealer->getScore();
+
+        ?>
+    </p>
 </div>
 
 
-<form action="index.php" method="post">
-    <input type="submit" name="action" value="hit">
-    <input type="submit" name="action" value="stand">
-    <input type="submit" name="action" value="surrender">
-    <input type="submit" name="action" value="reset">
 
 
 </body>
