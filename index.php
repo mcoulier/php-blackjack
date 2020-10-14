@@ -36,11 +36,6 @@ if (!isset($_SESSION['blackjack']))
 //If session does exist, call it var game
 $game = $_SESSION['blackjack'];
 
-if (!isset($_SESSION['score']))
-{
-    $_SESSION['score'] = 0;
-}
-
 //Setting variables from
 $player = $game->getPlayer();
 $dealer = $game->getDealer();
@@ -56,13 +51,22 @@ if(!isset($_POST['action'])){
     $player->getScore();
 
     if($player->loser() == true){
-        echo "Player lost.";
+        echo "Player bust";
     }
 
     echo "Player hit";
 
 } elseif ($_POST['action'] === "stand"){
     $dealer->hit($deck);
+
+    if ($dealer->loser() == true){
+        echo "Dealer bust";
+    } elseif ($player->getScore() == $dealer->getScore()){
+        echo "Draw, dealer wins";
+    } else {
+        echo "Player won";
+    }
+
     echo "Player stands";
 
 } elseif ($_POST['action'] === "surrender"){
